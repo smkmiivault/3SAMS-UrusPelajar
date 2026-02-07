@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3 SIDDIQ ELITE | AMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+    <style>
+        .hamburger-container {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            z-index: 50;
+            cursor: pointer;
+            width: 35px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .bar {
+            height: 3px;
+            width: 100%;
+            background: #C5A059;
+            border-radius: 4px;
+            transition: 0.4s;
+        }
+
+        .active .bar:nth-child(1) {
+            transform: translateY(10px) rotate(45deg);
+        }
+
+        .active .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .active .bar:nth-child(3) {
+            transform: translateY(-10px) rotate(-45deg);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 300px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(30px);
+            transition: 0.5s ease;
+            z-index: 40;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        :root {
+            --cream: #FDFBF7;
+            --gold: #C5A059;
+            --gold-light: #E2CFA4;
+            --pastel-blue: #E3EBF3;
+            --deep-blue: #2C3E50;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--cream);
+            background-image: radial-gradient(circle at bottom left, #f3ece0 0%, transparent 30%);
+            color: var(--deep-blue);
+        }
+
+        .font-serif-elite {
+            font-family: 'Cinzel', serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(197, 160, 89, 0.15);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.02);
+        }
+
+        .gold-gradient {
+            background: linear-gradient(135deg, #C5A059 0%, #E2CFA4 100%);
+        }
+
+        .input-elite {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+
+        .input-elite:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.1);
+        }
+
+        .btn-elite {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 1px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+        }
+
+        .btn-elite:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(197, 160, 89, 0.25);
+        }
+
+        /* Table Styling */
+        th {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+            color: var(--gold);
+        }
+
+        /* === HAMBURGER === */
+        .hamburger-container {
+            position: fixed;
+            top: 32px;
+            left: 32px;
+            z-index: 60;
+            cursor: pointer;
+            width: 36px;
+            height: 26px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .bar {
+            height: 3px;
+            width: 100%;
+            background: #C5A059;
+            border-radius: 4px;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .active .bar:nth-child(1) {
+            transform: translateY(11px) rotate(45deg);
+        }
+
+        .active .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .active .bar:nth-child(3) {
+            transform: translateY(-11px) rotate(-45deg);
+        }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 300px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+            border-right: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 110px 30px 20px;
+            font-size: 0.75rem;
+            color: #C5A059;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-menu {
+            flex-grow: 1;
+            padding: 0 15px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            margin-bottom: 8px;
+            color: #2C3E50;
+            border-radius: 15px;
+            transition: 0.3s;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            margin-right: 15px;
+            color: #C5A059;
+            width: 22px;
+            text-align: center;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateX(10px);
+        }
+
+        /* === LOGOUT === */
+        .logout {
+            margin: 20px 15px 40px;
+            color: #cc4444;
+        }
+    </style>
+    <script>
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('hamburger').classList.toggle('active');
+        }
+    </script>
+
+</head>
+
+<body class="min-h-screen pt-24 px-4 md:px-10">
+    <div class="hamburger-container" id="hamburger" onclick="toggleMenu()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">Menu Navigasi</div>
+        <nav class="nav-menu">
+            <a href="https://smkmiivault.github.io/3SAMS-PanelUtama/" class="nav-item">
+                <i class="fas fa-house"></i> Panel Utama
+            </a>
+            <a href="https://smkmiivault.github.io/3SAMS-UrusPelajar/" class="nav-item">
+                <i class="fas fa-user-tie"></i> Urus Pelajar
+            </a>
+            <a href="https://smkmiivault.github.io/3SAMS-RekodHadir/" class="nav-item">
+                <i class="fas fa-fingerprint"></i> Rekod Hadir
+            </a>
+            <a href="https://smkmiivault.github.io/3SAMS-Analitik/" class="nav-item">
+                <i class="fas fa-chart-pie"></i> Analitik
+            </a>
+        </nav>
+
+        <!-- 🔴 LOGOUT BUTTON -->
+        <div class="nav-item logout" onclick="logout()">
+            <i class="fas fa-power-off"></i> Log Keluar
+        </div>
+    </div>
+
+    <header class="max-w-7xl mx-auto mb-12 flex flex-col md:flex-row justify-between items-end gap-6 border-b border-gold-light/20 pb-8">
+        <div>
+            <span class="text-[10px] uppercase tracking-[0.4em] text-gold font-bold">3 SIDDIQ ELITE | AMS</span>
+            <h1 class="text-4xl font-serif-elite mt-2 tracking-widest">PENGURUSAN PELAJAR KELAS 3 SIDDIQ</h1>
+        </div>
+        <div class="flex gap-3">
+            <button id="exportPdf" class="btn-elite bg-white border border-red-100 text-red-400 px-6 py-3 rounded-full flex items-center gap-2 hover:bg-red-50">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z" />
+                    <path d="M3 8a2 2 0 012-2v10h8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
+                </svg>
+                Export PDF
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        <section class="lg:col-span-4">
+            <div class="glass-card p-8 rounded-[2.5rem] sticky top-10">
+                <h2 class="font-serif-elite text-lg mb-6 flex items-center gap-3">
+                    <span class="w-8 h-[1px] bg-gold"></span>
+                    Daftar Baru
+                </h2>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-[10px] uppercase tracking-widest font-bold text-gray-400 ml-2">Informasi Peribadi</label>
+                        <input id="namaPenuh" placeholder="NAMA PENUH" class="input-elite w-full p-4 rounded-2xl mt-2 font-semibold">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <input id="ic" placeholder="NO IC (12 DIGIT)" maxlength="12" class="input-elite p-4 rounded-2xl">
+                        <input id="uid" placeholder="RFID UID" maxlength="10" class="input-elite p-4 rounded-2xl">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <select id="jantina" class="input-elite p-4 rounded-2xl text-gray-500 appearance-none">
+                            <option value="">JANTINA</option>
+                            <option value="LELAKI">LELAKI</option>
+                            <option value="PEREMPUAN">PEREMPUAN</option>
+                        </select>
+                        <input id="pin" placeholder="PIN (6 DIGIT)" maxlength="6" class="input-elite p-4 rounded-2xl">
+                    </div>
+
+                    <input id="delima" placeholder="ID DELIMA (cth: m-123@moe-dl)" class="input-elite w-full p-4 rounded-2xl">
+                    <input id="gambar" placeholder="LINK FOTO (OPTIONAL)" class="input-elite w-full p-4 rounded-2xl">
+
+                    <button id="saveStudent" class="btn-elite gold-gradient text-white w-full py-5 rounded-2xl shadow-lg mt-4">
+                        Simpan Profil Pelajar
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="lg:col-span-8 space-y-6">
+            <div class="relative">
+                <input id="searchInput" placeholder="Cari menerusi Nama, IC atau ID Delima..." class="w-full bg-white/50 border border-gray-100 p-5 pl-14 rounded-full text-sm shadow-sm focus:ring-2 ring-gold/20 outline-none transition-all">
+                <svg class="w-5 h-5 absolute left-6 top-1/2 -translate-y-1/2 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+
+            <div class="glass-card rounded-[2.5rem] overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-gray-50/50">
+                                <th class="px-8 py-5 text-[11px] font-bold">Butiran Pelajar</th>
+                                <th class="px-4 py-5 text-[11px] font-bold">Identiti & RFID</th>
+                                <th class="px-4 py-5 text-[11px] font-bold">Delima</th>
+                                <th class="px-8 py-5 text-[11px] font-bold text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTable" class="divide-y divide-gray-50">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="emptyState" class="hidden py-20 text-center">
+                    <p class="text-gray-400 italic">Tiada rekod pelajar dijumpai.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="editModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div class="bg-[#FDFBF7] w-full max-w-lg p-10 rounded-[3rem] shadow-2xl border border-gold-light relative">
+            <h2 class="font-serif-elite text-2xl text-center mb-8 tracking-widest">KEMASKINI PROFIL</h2>
+
+            <div class="space-y-4">
+                <div class="text-center mb-6">
+                    <input id="eNama" disabled class="bg-transparent border-none text-center font-serif-elite text-gold text-xl w-full">
+                    <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Nama Tidak Boleh Diubah</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[9px] font-bold text-gray-400 ml-2">NO KAD PENGENALAN</label>
+                        <input id="eIc" class="input-elite w-full p-4 rounded-xl">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[9px] font-bold text-gray-400 ml-2">RFID UID</label>
+                        <input id="eUid" class="input-elite w-full p-4 rounded-xl">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[9px] font-bold text-gray-400 ml-2">JANTINA</label>
+                        <select id="eJantina" class="input-elite w-full p-4 rounded-xl">
+                            <option value="LELAKI">LELAKI</option>
+                            <option value="PEREMPUAN">PEREMPUAN</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[9px] font-bold text-gray-400 ml-2">PIN KESELAMATAN</label>
+                        <input id="ePin" class="input-elite w-full p-4 rounded-xl">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[9px] font-bold text-gray-400 ml-2">AKAUN DELIMA</label>
+                    <input id="eDelima" class="input-elite w-full p-4 rounded-xl">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[9px] font-bold text-gray-400 ml-2">LINK GAMBAR</label>
+                    <input id="eGambar" class="input-elite w-full p-4 rounded-xl">
+                </div>
+
+                <div class="flex gap-4 pt-6">
+                    <button onclick="editModal.classList.add('hidden')" class="flex-1 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest hover:text-gray-600">Batal</button>
+                    <button id="updateStudent" class="flex-1 gold-gradient text-white py-4 rounded-2xl btn-elite shadow-lg">Simpan Perubahan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import {
+            getAuth,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import {
+            getFirestore,
+            collection,
+            doc,
+            setDoc,
+            updateDoc,
+            onSnapshot
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // 🔥 INIT SEKALI SAHAJA
+        const app = initializeApp({
+            apiKey: "AIzaSyBV5pPnUoZ5__ZDnpqutonr0xD8gI1Za7o",
+            authDomain: "semii2go.firebaseapp.com",
+            projectId: "semii2go"
+        });
+
+        const db = getFirestore(app);
+        const auth = getAuth();
+
+        (async () => {
+            try {
+                // tunggu Firebase hydrate betul-betul
+                const user = auth.currentUser;
+
+                if (!user) {
+                    // tunggu sikit untuk IndexedDB
+                    await new Promise(r => setTimeout(r, 500));
+                }
+
+                if (!auth.currentUser) {
+                    window.location.replace(
+                        "https://smkmiivault.github.io/3SAMS-Logmasuk/"
+                    );
+                    return;
+                }
+
+                // 🔥 SAH: user memang login
+                await auth.currentUser.getIdToken(true);
+
+                // ✅ biar page jalan
+                console.log("Auth OK:", auth.currentUser.email);
+
+            } catch (err) {
+                window.location.replace(
+                    "https://smkmiivault.github.io/3SAMS-Logmasuk/"
+                );
+            }
+        })();
+
+        // 🔌 LOGOUT (GLOBAL)
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+
+                // 🔐 Pastikan session betul-betul cleared
+                setTimeout(() => {
+                    window.location.replace(
+                        "https://smkmiivault.github.io/3SAMS-Logmasuk/"
+                    );
+                }, 100);
+            } catch (err) {
+                console.error("Logout gagal:", err);
+                alert("Ralat semasa log keluar. Cuba lagi.");
+            }
+        };
+
+
+        let pelajar = [];
+        let filtered = [];
+        let editDocId = null;
+
+        const clean = v => (typeof v === "string" ? v.trim() : "");
+
+        function docIdFromName(nama) {
+            return clean(nama).toUpperCase().replace(/[^A-Z0-9]+/g, "_");
+        }
+
+        /* ADD */
+        saveStudent.onclick = async () => {
+            const data = {
+                namaPenuh: clean(namaPenuh.value),
+                ic: clean(ic.value),
+                idPelajar: clean(uid.value),
+                delima: clean(delima.value),
+                jantina: clean(jantina.value),
+                pin: clean(pin.value),
+                gambar: clean(gambar.value)
+            };
+
+            if (!data.namaPenuh || data.ic.length !== 12 || data.idPelajar.length !== 10 || data.pin.length !== 6 || !data.jantina) {
+                alert("Sila pastikan maklumat lengkap (IC: 12 digit, UID: 10 digit, PIN: 6 digit)");
+                return;
+            }
+
+            if (!data.delima) delete data.delima;
+            if (!data.gambar) delete data.gambar;
+
+            await setDoc(doc(db, "pelajar", docIdFromName(data.namaPenuh)), data);
+            namaPenuh.value = ic.value = uid.value = delima.value = pin.value = gambar.value = "";
+            jantina.value = "";
+        };
+
+        /* SYNC DATA */
+        onSnapshot(collection(db, "pelajar"), snap => {
+            pelajar = [];
+            snap.forEach(d => {
+                const p = d.data();
+                if (p?.namaPenuh && p?.idPelajar) pelajar.push(p);
+            });
+            applySearch();
+        });
+
+        /* SEARCH */
+        searchInput.oninput = applySearch;
+
+        function applySearch() {
+            const q = clean(searchInput.value).toLowerCase();
+            filtered = pelajar.filter(p => [p.namaPenuh, p.ic, p.idPelajar, p.delima].filter(Boolean).some(v => v.toLowerCase().includes(q)));
+            renderTable();
+        }
+
+        /* RENDER TABLE (Elite Style) */
+        function renderTable() {
+            studentTable.innerHTML = "";
+            if (filtered.length === 0) {
+                emptyState.classList.remove("hidden");
+                return;
+            }
+            emptyState.classList.add("hidden");
+
+            filtered.forEach(p => {
+                const genderTag = p.jantina === "LELAKI" ? 'bg-blue-50 text-blue-500' : 'bg-pink-50 text-pink-500';
+                studentTable.innerHTML += `
+    <tr class="hover:bg-gray-50/50 transition-colors group">
+        <td class="px-8 py-6">
+            <div class="font-bold text-gray-800 tracking-tight">${p.namaPenuh}</div>
+            <div class="flex items-center gap-2 mt-1">
+                <span class="px-2 py-0.5 rounded text-[9px] font-bold ${genderTag}">${p.jantina}</span>
+                <span class="text-[10px] text-gray-400">IC: ${p.ic}</span>
+            </div>
+        </td>
+        <td class="px-4 py-6">
+            <div class="font-mono text-xs text-gold bg-gold/5 px-2 py-1 rounded inline-block border border-gold/10">ID: ${p.idPelajar}</div>
+        </td>
+        <td class="px-4 py-6">
+            <div class="text-xs text-gray-500 font-light italic">${p.delima||"-"}</div>
+        </td>
+        <td class="px-8 py-6 text-right">
+            <button class="bg-white border border-gray-100 text-gray-400 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:border-gold hover:text-gold transition-all shadow-sm" onclick='openEdit(${JSON.stringify(p)})'>
+                Edit Profil
+            </button>
+        </td>
+    </tr>`;
+            });
+        }
+
+        /* EDIT */
+        window.openEdit = (p) => {
+            editDocId = docIdFromName(p.namaPenuh);
+            eNama.value = p.namaPenuh;
+            eIc.value = p.ic;
+            eUid.value = p.idPelajar;
+            eDelima.value = p.delima || "";
+            eJantina.value = p.jantina;
+            ePin.value = p.pin;
+            eGambar.value = p.gambar || "";
+            editModal.classList.remove("hidden");
+        };
+
+        updateStudent.onclick = async () => {
+            const data = {
+                ic: clean(eIc.value),
+                idPelajar: clean(eUid.value),
+                delima: clean(eDelima.value),
+                jantina: clean(eJantina.value),
+                pin: clean(ePin.value),
+                gambar: clean(eGambar.value)
+            };
+            if (!data.delima) delete data.delima;
+            if (!data.gambar) delete data.gambar;
+            await updateDoc(doc(db, "pelajar", editDocId), data);
+            editModal.classList.add("hidden");
+        };
+
+        /* PDF EXPORT (Elite Table) */
+        exportPdf.onclick = () => {
+            const {
+                jsPDF
+            } = window.jspdf;
+            const pdf = new jsPDF();
+
+            // Header PDF
+            pdf.setFont("helvetica", "bold");
+            pdf.setTextColor(197, 160, 89);
+            pdf.setFontSize(18);
+            pdf.text("3 SIDDIQ - REGISTRY PELAJAR", 14, 20);
+
+            pdf.setFontSize(10);
+            pdf.setTextColor(100);
+            pdf.setFont("helvetica", "normal");
+            pdf.text("Senarai Rasmi Pelajar Kelas 3 Siddiq", 14, 26);
+
+            const rows = filtered.map(p => [p.namaPenuh, p.ic, p.idPelajar, p.jantina, p.delima || "-"]);
+
+            pdf.autoTable({
+                startY: 35,
+                head: [
+                    ["NAMA PENUH", "KAD PENGENALAN", "RFID UID", "JANTINA", "ID DELIMA"]
+                ],
+                body: rows,
+                headStyles: {
+                    fillColor: [197, 160, 89],
+                    textColor: 255,
+                    fontSize: 8,
+                    fontStyle: 'bold'
+                },
+                alternateRowStyles: {
+                    fillColor: [253, 251, 247]
+                },
+                margin: {
+                    left: 14,
+                    right: 14
+                }
+            });
+
+            pdf.save("Senarai_Pelajar_3_Siddiq_Elite.pdf");
+        };
+    </script>
+</body>
+
+</html>
