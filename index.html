@@ -12,6 +12,7 @@
 
 
     <style>
+
         .hamburger-container {
             position: fixed;
             top: 30px;
@@ -428,35 +429,19 @@
         const db = getFirestore(app);
         const auth = getAuth();
 
-        (async () => {
-            try {
-                // tunggu Firebase hydrate betul-betul
-                const user = auth.currentUser;
+        // Gantikan blok (async () => { ... }) anda dengan ini:
 
-                if (!user) {
-                    // tunggu sikit untuk IndexedDB
-                    await new Promise(r => setTimeout(r, 500));
-                }
-
-                if (!auth.currentUser) {
-                    window.location.replace(
-                        "https://smkmiivault.github.io/3SAMS-Logmasuk/"
-                    );
-                    return;
-                }
-
-                // 🔥 SAH: user memang login
-                await auth.currentUser.getIdToken(true);
-
-                // ✅ biar page jalan
-                console.log("Auth OK:", auth.currentUser.email);
-
-            } catch (err) {
-                window.location.replace(
-                    "https://smkmiivault.github.io/3SAMS-Logmasuk/"
-                );
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Jika ada user, tunjukkan body dan teruskan proses
+                console.log("Akses dibenarkan:", user.email);
+                document.body.style.display = "block";
+            } else {
+                // Jika tiada user, terus redirect ke login
+                console.log("Tiada sesi aktif, melencong ke login...");
+                window.location.replace("https://smkmiivault.github.io/3SAMS-Logmasuk/");
             }
-        })();
+        });
 
         // 🔌 LOGOUT (GLOBAL)
         window.logout = async function() {
