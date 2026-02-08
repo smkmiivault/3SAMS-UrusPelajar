@@ -12,7 +12,6 @@
 
 
     <style>
-
         .hamburger-container {
             position: fixed;
             top: 30px;
@@ -233,7 +232,8 @@
 
 </head>
 
-<body class="min-h-screen pt-24 px-4 md:px-10">
+<body style="display:none" class="min-h-screen pt-24 px-4 md:px-10">
+
     <div class="hamburger-container" id="hamburger" onclick="toggleMenu()">
         <div class="bar"></div>
         <div class="bar"></div>
@@ -427,21 +427,25 @@
         });
 
         const db = getFirestore(app);
-        const auth = getAuth();
+        const auth = getAuth(app);
 
         // Gantikan blok (async () => { ... }) anda dengan ini:
 
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // Jika ada user, tunjukkan body dan teruskan proses
-                console.log("Akses dibenarkan:", user.email);
-                document.body.style.display = "block";
-            } else {
-                // Jika tiada user, terus redirect ke login
-                console.log("Tiada sesi aktif, melencong ke login...");
-                window.location.replace("https://smkmiivault.github.io/3SAMS-Logmasuk/");
+            if (!user) {
+                window.location.replace(
+                    "https://smkmiivault.github.io/3SAMS-Logmasuk/"
+                );
+                return;
             }
+
+            console.log("AUTH OK:", user.uid);
+            document.body.style.display = "block";
+
+            // 🔥 BARU BOLEH INIT DATA
+            initPelajar();
         });
+
 
         // 🔌 LOGOUT (GLOBAL)
         window.logout = async function() {
@@ -497,14 +501,17 @@
         };
 
         /* SYNC DATA */
-        onSnapshot(collection(db, "pelajar"), snap => {
-            pelajar = [];
-            snap.forEach(d => {
-                const p = d.data();
-                if (p?.namaPenuh && p?.idPelajar) pelajar.push(p);
+        function initPelajar() {
+            onSnapshot(collection(db, "pelajar"), snap => {
+                pelajar = [];
+                snap.forEach(d => {
+                    const p = d.data();
+                    if (p?.namaPenuh && p?.idPelajar) pelajar.push(p);
+                });
+                applySearch();
             });
-            applySearch();
-        });
+        }
+
 
         /* SEARCH */
         searchInput.oninput = applySearch;
